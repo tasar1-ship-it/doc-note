@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Closing Checklist — Steve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sans:'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --mono:'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    -webkit-font-smoothing:antialiased;
+    background:#E4DFD3;
+    font-family:var(--sans);
+    color:#20201C;
+  }
+  ::selection{ background:rgba(47,75,59,0.18); }
+
+  .outer{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:56px 24px;
+    padding-top:calc(56px + env(safe-area-inset-top));
+  }
+  .card{
+    width:100%;
+    max-width:920px;
+    background:#F5F2EA;
+    border:1px solid rgba(32,32,28,0.10);
+    box-shadow:0 1px 0 rgba(255,255,255,0.6) inset, 0 18px 48px -28px rgba(32,32,28,0.45);
+  }
+
+  .head{ padding:40px 48px 28px 48px; border-bottom:1px solid rgba(32,32,28,0.14); }
+  .head-row{ display:flex; justify-content:space-between; align-items:flex-start; gap:32px; }
+  .eyebrow{ font-family:var(--mono); font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:#2F4B3B; font-weight:500; }
+  .title{ margin:10px 0 0 0; font-family:var(--serif); font-weight:500; font-size:38px; line-height:1.05; letter-spacing:-0.01em; }
+  .subtitle{ margin:10px 0 0 0; font-size:13.5px; line-height:1.5; color:#6F6E63; max-width:430px; }
+  .meta{ flex:none; text-align:right; font-family:var(--mono); font-size:12px; line-height:1.9; color:#6F6E63; }
+  .meta .k{ color:#A3A296; }
+  .meta .v{ color:#6F6E63; }
+
+  .progress{ margin-top:26px; display:flex; align-items:center; gap:18px; }
+  .bar{ flex:1; height:6px; border-radius:6px; background:rgba(32,32,28,0.10); overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:6px; background:#2F4B3B; width:0%; transition:width .25s ease; }
+  .progress-label{ flex:none; font-family:var(--mono); font-size:12px; color:#20201C; letter-spacing:0.02em; }
+  .btn{ flex:none; font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; border-radius:6px; padding:6px 11px; cursor:pointer; }
+  .btn-print{ color:#F5F2EA; background:#2F4B3B; border:1px solid #2F4B3B; padding:6px 13px; }
+  .btn-print:hover{ background:#26402f; }
+  .btn-reset{ color:#6F6E63; background:transparent; border:1px solid rgba(32,32,28,0.18); }
+  .btn-reset:hover{ border-color:rgba(32,32,28,0.4); color:#20201C; }
+
+  .body{ padding:34px 48px 8px 48px; }
+  .top{ display:grid; grid-template-columns:1.12fr 1fr; gap:44px; }
+
+  .sec-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:6px; }
+  .sec-head-l{ display:flex; align-items:center; gap:10px; }
+  .tick{ width:9px; height:9px; background:#2F4B3B; display:inline-block; }
+  .sec-title{ margin:0; font-family:var(--serif); font-weight:500; font-size:20px; letter-spacing:-0.005em; }
+  .sec-count{ font-family:var(--mono); font-size:12px; color:#9A998D; }
+
+  /* rows are <label> with a real checkbox input — toggle works with no JS */
+  .row{ display:flex; gap:13px; align-items:flex-start; padding:10px 0; cursor:pointer; border-bottom:1px solid rgba(32,32,28,0.08); -webkit-tap-highlight-color:transparent; }
+  .row input, .prow input{ position:absolute; opacity:0; width:0; height:0; margin:0; pointer-events:none; }
+  .box{ flex:none; width:20px; height:20px; border-radius:5px; display:flex; align-items:center; justify-content:center; margin-top:1px; border:1.5px solid rgba(32,32,28,0.28); background:transparent; transition:background .15s, border-color .15s; }
+  .chk{ color:#F5F2EA; font-size:12px; line-height:1; opacity:0; }
+  .row-label{ font-size:14px; line-height:1.45; color:#20201C; }
+  .row input:checked + .box{ background:#2F4B3B; border-color:#2F4B3B; }
+  .row input:checked + .box .chk{ opacity:1; }
+  .row input:checked ~ .row-label{ color:#9A998D; text-decoration:line-through; }
+
+  .proc{ margin-top:38px; padding-top:30px; border-top:1px solid rgba(32,32,28,0.14); }
+  .proc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:0 44px; }
+  .prow{ display:flex; gap:14px; align-items:center; padding:11px 0; cursor:pointer; border-bottom:1px solid rgba(32,32,28,0.08); -webkit-tap-highlight-color:transparent; }
+  .tile{ flex:none; width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:12px; font-weight:500; background:rgba(47,75,59,0.10); color:#2F4B3B; transition:background .15s, color .15s; }
+  .pcenter{ flex:1; display:flex; flex-direction:column; gap:5px; }
+  .pcenter .row-label{ line-height:1.4; }
+  .sub{ display:flex; gap:8px; align-items:flex-start; font-size:13px; line-height:1.4; color:#6F6E63; }
+  .sub .dot{ flex:none; color:#2F4B3B; }
+  .pbox{ flex:none; width:18px; height:18px; border-radius:5px; display:flex; align-items:center; justify-content:center; border:1.5px solid rgba(32,32,28,0.28); background:transparent; transition:background .15s, border-color .15s; }
+  .pbox .chk{ font-size:11px; }
+  .prow input:checked ~ .tile{ background:#2F4B3B; color:#F5F2EA; }
+  .prow input:checked ~ .pbox{ background:#2F4B3B; border-color:#2F4B3B; }
+  .prow input:checked ~ .pbox .chk{ opacity:1; }
+  .prow input:checked ~ .pcenter .row-label{ color:#9A998D; text-decoration:line-through; }
+
+  .remarks{ margin-top:38px; padding-top:30px; border-top:1px solid rgba(32,32,28,0.14); padding-bottom:44px; }
+  .remarks-head{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .remarks-box{ background:#EFEBE1; border:1px solid rgba(32,32,28,0.10); border-radius:8px; padding:18px 20px; display:flex; flex-direction:column; gap:11px; }
+  .remark{ display:flex; gap:11px; align-items:flex-start; font-size:14px; line-height:1.6; color:#20201C; }
+  .remark .dot{ flex:none; color:#2F4B3B; margin-top:1px; }
+
+  @media (max-width:720px){
+    .outer{ padding:0; padding-top:env(safe-area-inset-top); background:#F5F2EA; }
+    .card{ border:none; box-shadow:none; }
+    .head{ padding:28px 22px 22px 22px; }
+    .head-row{ flex-direction:column; gap:14px; }
+    .meta{ text-align:left; }
+    .title{ font-size:30px; }
+    .body{ padding:24px 22px 8px 22px; }
+    .top{ grid-template-columns:1fr; gap:30px; }
+    .proc-grid{ grid-template-columns:1fr; }
+    .progress{ flex-wrap:wrap; }
+  }
+  @media (max-width:420px){ .title{ font-size:26px; } }
+
+  @media print{
+    @page{ margin:0; }
+    html,body{ background:#E4DFD3 !important; }
+    .noprint{ display:none !important; }
+    .outer{ padding:32px 28px !important; background:#E4DFD3 !important; min-height:0 !important; display:block !important; }
+    .card{ max-width:100% !important; background:#F5F2EA !important; }
+    *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+    section, .row, .prow{ break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="outer">
+  <div class="card">
+
+    <div class="head">
+      <div class="head-row">
+        <div>
+          <div class="eyebrow">Transaction Closing</div>
+          <h1 class="title">Checklist</h1>
+          <p class="subtitle">Document and procedure tracker for the execution of the 2B/HSBC Lon transaction.</p>
+        </div>
+        <div class="meta">
+          <div><span class="k">DATE&nbsp;</span>4 July 2026</div>
+          <div><span class="k">CAPITAL OWNER&nbsp;</span><span class="v">C</span></div>
+        </div>
+      </div>
+
+      <div class="progress">
+        <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+        <div class="progress-label" id="progressLabel">0 / 14 complete</div>
+        <button type="button" class="btn btn-print noprint" id="printBtn">Print / PDF</button>
+        <button type="button" class="btn btn-reset noprint" id="resetBtn">Reset</button>
+      </div>
+    </div>
+
+    <div class="body">
+
+      <div class="top">
+        <section data-group="initial">
+          <div class="sec-head">
+            <div class="sec-head-l"><span class="tick"></span><h2 class="sec-title">Initial Documents</h2></div>
+            <span class="sec-count" data-count="initial">0 / 4</span>
+          </div>
+          <label class="row"><input type="checkbox" data-id="d1"><span class="box"><span class="chk">&#10003;</span></span><span class="row-label">CIS</span></label>
+          <label class="row"><input type="checkbox" data-id="d2"><span class="box"><span class="chk">&#10003;</span></span><span class="row-label">Passport</span></label>
+          <label class="row"><input type="checkbox" data-id="d3"><span class="box"><span class="chk">&#10003;</span></span><span class="row-label">Current Account Statement</span></label>
+          <label class="row"><input type="checkbox" data-id="d4"><span class="box"><span class="chk">&#10003;</span></span><span class="row-label">Non solicitation Letter</span></label>
+        </section>
+
+        <section data-group="next">
+          <div class="sec-head">
+            <div class="sec-head-l"><span class="tick"></span><h2 class="sec-title">Next Steps</h2></div>
+            <span class="sec-count" data-count="next">0 / 3</span>
+          </div>
+          <label class="row"><input type="checkbox" data-id="n1"><span class="box"><span class="chk">&#10003;</span></span><span class="row-label">Sign initial documents and email to Euzhong Services Cyprus</span></label>
+          <label class="row"><input type="checkbox" data-id="n3"><span class="box"><span class="chk">&#10003;</span></span><span class="row-label">Engagement Letter with Euzhong Services</span></label>
+          <label class="row"><input type="checkbox" data-id="n2"><span class="box"><span class="chk">&#10003;</span></span><span class="row-label">Meet Andrew in London</span></label>
+        </section>
+      </div>
+
+      <section class="proc" data-group="procedure">
+        <div class="sec-head">
+          <div class="sec-head-l"><span class="tick"></span><h2 class="sec-title">Procedure</h2></div>
+          <span class="sec-count" data-count="procedure">0 / 7</span>
+        </div>
+        <div class="proc-grid">
+          <div>
+            <label class="prow"><input type="checkbox" data-id="p1"><span class="tile">01</span><span class="pcenter"><span class="row-label">Internal due diligence (upon receipt of initial documents)</span></span><span class="pbox"><span class="chk">&#10003;</span></span></label>
+            <label class="prow"><input type="checkbox" data-id="p2"><span class="tile">02</span><span class="pcenter"><span class="row-label">Call to William &mdash; start process</span></span><span class="pbox"><span class="chk">&#10003;</span></span></label>
+            <label class="prow"><input type="checkbox" data-id="p3"><span class="tile">03</span><span class="pcenter"><span class="row-label">All else depends on William customizing the transaction, but likely continues as below</span></span><span class="pbox"><span class="chk">&#10003;</span></span></label>
+            <label class="prow"><input type="checkbox" data-id="p4"><span class="tile">04</span><span class="pcenter"><span class="row-label">Contract from lawyer (talks to Steve directly)</span></span><span class="pbox"><span class="chk">&#10003;</span></span></label>
+          </div>
+          <div>
+            <label class="prow"><input type="checkbox" data-id="p5"><span class="tile">05</span><span class="pcenter"><span class="row-label">Lawyer organizes bank meeting (lawyer of bank)</span></span><span class="pbox"><span class="chk">&#10003;</span></span></label>
+            <label class="prow"><input type="checkbox" data-id="p6"><span class="tile">06</span><span class="pcenter"><span class="row-label">Contract signed inside bank</span></span><span class="pbox"><span class="chk">&#10003;</span></span></label>
+            <label class="prow"><input type="checkbox" data-id="p7"><span class="tile">07</span><span class="pcenter"><span class="row-label">Pay orders (leaving in bank is better) &mdash; credited to new SPV account after 10 days</span><span class="sub"><span class="dot">&#8226;</span><span>SPV carries all clearances to move funds anywhere</span></span></span><span class="pbox"><span class="chk">&#10003;</span></span></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="remarks">
+        <div class="remarks-head"><span class="tick"></span><h2 class="sec-title">Remarks</h2></div>
+        <div class="remarks-box">
+          <div class="remark"><span class="dot">&#8226;</span><span>Several documents must be reproduced 3 times during the preparation process.</span></div>
+          <div class="remark"><span class="dot">&#8226;</span><span>Subsequent to the initial short term transaction an additional long term transaction will be designed. Terms will be communicated separately.</span></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var KEY = 'fin-closing-checklist-v1';
+  var inputs = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"][data-id]'));
+  var total = inputs.length;
+  var groups = {};
+  inputs.forEach(function(inp){
+    var g = inp.closest('[data-group]').getAttribute('data-group');
+    (groups[g] = groups[g] || []).push(inp);
+  });
+
+  function loadState(){
+    var done = {};
+    try{ var raw = localStorage.getItem(KEY); if(raw){ var d = JSON.parse(raw); done = (d && d.done) || {}; } }catch(e){}
+    inputs.forEach(function(inp){ inp.checked = !!done[inp.getAttribute('data-id')]; });
+  }
+  function saveState(){
+    var done = {};
+    inputs.forEach(function(inp){ if(inp.checked) done[inp.getAttribute('data-id')] = true; });
+    try{ localStorage.setItem(KEY, JSON.stringify({ done: done })); }catch(e){}
+  }
+  function update(){
+    Object.keys(groups).forEach(function(g){
+      var list = groups[g], n = 0;
+      list.forEach(function(i){ if(i.checked) n++; });
+      var c = document.querySelector('[data-count="'+g+'"]');
+      if(c) c.textContent = n + ' / ' + list.length;
+    });
+    var done = 0;
+    inputs.forEach(function(i){ if(i.checked) done++; });
+    document.getElementById('progressLabel').textContent = done + ' / ' + total + ' complete';
+    document.getElementById('barFill').style.width = Math.round((done/total)*100) + '%';
+  }
+
+  inputs.forEach(function(inp){
+    inp.addEventListener('change', function(){ saveState(); update(); });
+  });
+  document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    inputs.forEach(function(i){ i.checked = false; });
+    saveState(); update();
+  });
+
+  loadState();
+  update();
+})();
+</script>
+</body>
+</html>
